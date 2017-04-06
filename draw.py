@@ -3,10 +3,30 @@ from matrix import *
 from math import *
 
 def add_polygon( points, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
-    add_point(points, x0, y0, z0)
-    add_point(points, x1, y1, z1)
-    add_point(points, x2, y2, z2)
+    pi = math.pi
 
+    # vectors on the polygon
+    A = [x1 - x0, y1 - y0, z1 - z0]
+    B = [x2 - x0, y2 - y0, z2 - z0]
+
+    # normal vector to polygon
+    N = [A[1] * B[2] - A[2] * B[1], A[2] * B[0] - A[0] * B[2], A[0] * B[1] - A[1] * B[0]]
+
+    # vector from surface to viewer
+    V = [0, 0 ,1]
+
+    # calculating theta between 
+    dotprod = N[0] * V[0] + N[1] * V[1] + N[2] * V[2]
+    magN = math.sqrt(N[0] ** 2 + N[1] ** 2 + N[2] ** 2)
+    magV = 1
+    theta = math.acos(dotprod / (magN * magV))
+
+    print(theta)
+    if (theta > (3 * pi/2) and theta < (pi/2)):
+        add_point(points, x0, y0, z0)
+        add_point(points, x1, y1, z1)
+        add_point(points, x2, y2, z2)
+    
 def draw_polygons( points, screen, color ):
     if len(points) < 3:
         print('Need at least 3 point to draw a polygon')
